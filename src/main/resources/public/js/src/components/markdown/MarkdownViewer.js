@@ -39,8 +39,13 @@ define(function (require) {
             var html;
             var doc = document.createElement('div');
             var self = this;
+            var newText;
             if (text) {
-                html = this.simpleMDE.markdown(text.escapeHtml().indentSpases().replace('_', '&#95;'));
+                newText = text.escapeHtml().indentSpases();
+                console.log(newText);
+                newText = newText.replace(/:heavy_check_mark:/g, '<img src="../../../../img/icons/heavy_check_mark.png" style="width:16px;height=16px;" />');
+                newText = newText.replace(/:heavy_exclamation_mark:/g, '<img src="../../../../img/icons/heavy_exclamation_mark.png" style="width:16px;height=16px;" />');
+                html = this.simpleMDE.markdown(newText);
                 doc.innerHTML = html;
                 $('img', doc).each(function () {
                     this.onload = function () {

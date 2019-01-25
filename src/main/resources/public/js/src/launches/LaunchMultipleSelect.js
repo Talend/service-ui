@@ -30,6 +30,7 @@ define(function (require) {
     var ForceFinishAction = require('launches/multipleActions/forceFinishAction');
     var RemoveAction = require('launches/multipleActions/removeAction');
     var ChangeModeAction = require('launches/multipleActions/changeModeAction');
+    var GenerateMessage = require('launches/multipleActions/generateMessage');
     var PostBugAction = require('launches/multipleActions/postBugAction');
     var IgnoreAAAction = require('launches/multipleActions/ignoreAAAction');
     var IncludeAAAction = require('launches/multipleActions/includeAAAction');
@@ -120,6 +121,11 @@ define(function (require) {
                     model.set({ invalidMessage: model.validate.changeMode() });
                 });
             },
+            generateMessage: function () {
+                _.each(this.collection.models, function (model) {
+                    model.set({ invalidMessage: model.validate.generateMessage() });
+                });
+            },
             forcefinish: function () {
                 _.each(this.collection.models, function (model) {
                     model.set({ invalidMessage: model.validate.forceFinish() });
@@ -200,6 +206,13 @@ define(function (require) {
             changemode: function () {
                 var self = this;
                 ChangeModeAction({ items: this.collection.models }).done(function () {
+                    self.collectionItems.load(true);
+                    self.reset();
+                });
+            },
+            generateMessage: function () {
+                var self = this;
+                GenerateMessage({ items: this.collection.models }).done(function () {
                     self.collectionItems.load(true);
                     self.reset();
                 });

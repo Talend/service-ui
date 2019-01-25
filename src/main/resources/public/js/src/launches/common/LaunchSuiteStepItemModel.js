@@ -241,6 +241,13 @@ define(function (require) {
                     }
                     return '';
                 },
+                generateMessage: function () {
+                    if (self.get('launch_owner') !== config.userModel.get('name') &&
+                        !isAdminLeadProjectMenedger()) {
+                        return Localization.launches.notYourOwnLaunch;
+                    }
+                    return '';
+                },
                 forceFinish: function () {
                     if (self.get('status') !== 'IN_PROGRESS') {
                         return Localization.launches.launchFinished;
