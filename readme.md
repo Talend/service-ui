@@ -37,3 +37,13 @@ module.exports = {
 9. run the command `npm run server`
 
 10. open `https://localhost:8080/` in browser
+
+## Customization good practices 
+
+to define : 
+1st ideas : 
+- 1 branch per customizations.
+- Put Talend name in custom localization, and new files/class. 
+
+
+
