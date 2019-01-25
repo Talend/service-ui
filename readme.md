@@ -1,4 +1,16 @@
-[![Build Status](https://semaphoreci.com/api/v1/lexecon/rp_service-ui/branches/develop/badge.svg)](http://reportportal.io/service-ui/index.html)
+# Report Portal service-ui for Talend
+
+## Talend Customizations
+
+- Automatic Slack message generation for daily reports
+
+## Installation
+
+### Prerequisite
+
+Need to run all the Report Portal services except the service-ui.
+
+### Steps to install
 
 1. Install nodejs
 
