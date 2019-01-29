@@ -14,6 +14,7 @@ module.exports = {
         contentBase: publicPath,
         https: false,
         host: '0.0.0.0',
+        port: '8282',
         proxy: [
             {
                 path: /^\/(composite|api|uat|ui).*/,
