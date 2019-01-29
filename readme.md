@@ -8,7 +8,7 @@
 
 ### Prerequisite
 
-Need to run all the Report Portal services except the service-ui.
+Need to run all the Report Portal services except the service-ui. Custom service-ui will run on port 8282.
 
 ### Steps to install
 
@@ -26,7 +26,7 @@ Need to run all the Report Portal services except the service-ui.
 
 ```javascript
 module.exports = {
-    path: ''  //     http://you_server:port/
+    path: ''  //     http://you_server:8080/ 
 };
 ```
 
@@ -36,4 +36,4 @@ module.exports = {
 
 9. run the command `npm run server`
 
-10. open `https://localhost:8080/` in browser
+10. open `https://localhost:8282/` in browser
