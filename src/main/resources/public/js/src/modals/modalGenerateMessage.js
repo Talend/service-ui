@@ -30,6 +30,11 @@ define(function (require) {
     var SingletonAppStorage = require('storage/SingletonAppStorage');
     var SingletonAppModel = require('model/SingletonAppModel');
     var SingletonRegistryInfoModel = require('model/SingletonRegistryInfoModel');
+    var talendConfig = require('talendConfig');
+    var CallService = require('callService');
+    var call = CallService.call;
+    var coreService = require('coreService');
+
 
     var config = App.getInstance();
 
@@ -37,9 +42,11 @@ define(function (require) {
         template: 'tpl-modal-talend-message-editor',
         className: 'modal-defect-editor',
         events: {
-            'click [data-js-close]': 'onClickClose'
+            'click [data-js-close]': 'onClickClose',
+            'click [data-js-send]': 'onClickSend',
         },
         initialize: function (option) {
+            this.content = "";
             this.context = option.context;
             this.registryInfo = new SingletonRegistryInfoModel();
             this.appStorage = new SingletonAppStorage();
@@ -50,13 +57,16 @@ define(function (require) {
                 this.viewModel.set({replaceComment: this.appStorage.get('replaceComment')});
             }
             this.items = option.items;
+            var self = this;
+            this.getMessagePreview(this.items).done(function () {
+                self.appModel = new SingletonAppModel();
+                self.defectTypesCollection = new SingletonDefectTypeCollection();
+                self.defectTypesCollection.ready.done(function () {
+                    this.render(option);
+                }.bind(self));
+                self.selectedIssue = null;
+            });
 
-            this.appModel = new SingletonAppModel();
-            this.defectTypesCollection = new SingletonDefectTypeCollection();
-            this.defectTypesCollection.ready.done(function () {
-                this.render(option);
-            }.bind(this));
-            this.selectedIssue = null;
         },
 
         render: function () {
@@ -98,24 +108,96 @@ define(function (require) {
             return data.comment ? data.comment : '';
         },
         getMessagePreview: function (items) {
-            var message = '';
+            var async = $.Deferred();
+            console.log(talendConfig);
+            this.content = '';
             var it = this;
-            message += 'Daily report of ' + Moment().format('LL') + '\n';
-            console.log(items);
+            this.content += 'Daily report of ' + Moment().format('LL') + '\n';
+            var promises = [];
             _.each(items, function (i) {
-                if (i.attributes.statistics.executions.failed > 0) {
-                    message += i.attributes.name + ': :heavy_exclamation_mark: ';
-                    message += it.testDetails(i);
-                    message += '\n';
-                } else {
-                    message += i.attributes.name + ': :heavy_check_mark: \n';
-                }
+                promises.push(it.launchDetails(i).promise());
             });
-            return message;
+            Promise.all(promises).then(function(values) {
+                console.log(values);
+                async.resolve();
+            });
+
+            return async;
+        },
+        urlName: function (item) {
+            var url = '';
+            url = window.location.origin + '/#' + item.appModel.attributes.projectId + '/launches/all%7Cpage.page=1&page.size=50&page.sort=start_time,number%2CDESC/' + item.attributes.id;
+            return url;
+        },
+        launchDetails: function (launch) {
+            var async = $.Deferred();
+            var self = this;
+
+            if (launch.attributes.statistics.executions.skipped > 0) {
+                coreService.getTestItemsByLaunch(launch.id)
+                    .done(function (response) {
+                        var nbFeaturesKO = 0;
+                        var jira = [];
+                        _.each(response.content, function (test) {
+                            if (test.description != undefined && test.description.startsWith("Feature") && test.statistics.executions.failed>0) {
+                                nbFeaturesKO++;
+                            }
+                            if (test.issue!=undefined && test.issue.externalSystemIssues != undefined && test.issue.externalSystemIssues.length > 0) {
+                                _.each(test.issue.externalSystemIssues,function(issue){
+                                    jira.push(issue.ticketId);
+                                });
+                            }
+                            //
+                        });
+                        self.content += '<' + self.urlName(launch) + '|' + launch.attributes.name + '>' + ': :heavy_exclamation_mark: `'+ nbFeaturesKO+' features KO`';
+                        if(jira.length>0){
+                            self.content += _.uniq(jira).join(",");
+                        }
+                        self.content += self.testDetails(launch);
+                        self.content += '\n';
+                        async.resolve();
+                    })
+                    .fail(function (error) {
+                        Util.ajaxFailMessenger(error, 'getItemsWidgetBugTable');
+                        async.resolve();
+                    });
+            } else {
+                this.content += '<' + self.urlName(launch) + '|' + launch.attributes.name + '>' + ': :heavy_check_mark: \n';
+                async.resolve();
+            }
+
+            return async;
         },
         testDetails: function (item) {
             var message = '';
-            message += item.attributes.statistics.executions.failed + ' tests KO';
+
+            //if(item.)
+
+            message += '\n' + item.attributes.statistics.executions.failed + ' tests KO : ';
+            for (var property in item.attributes.statistics.defects) {
+                if (item.attributes.statistics.defects.hasOwnProperty(property)) {
+                    switch (property) {
+                        case 'product_bug':
+                            message += (item.attributes.statistics.defects.product_bug.total > 0) ? item.attributes.statistics.defects.product_bug.total + ' Product bug ' : '';
+                            break;
+                        case 'automation_bug':
+                            message += (item.attributes.statistics.defects.automation_bug.total > 0) ? item.attributes.statistics.defects.automation_bug.total + ' Automation bug ' : '';
+                            break;
+                        case 'system_issue':
+                            message += (item.attributes.statistics.defects.automation_bug.total > 0) ? item.attributes.statistics.defects.automation_bug.total + ' System issue ' : '';
+                            break;
+                        case 'to_investigate':
+                            message += (item.attributes.statistics.defects.to_investigate.total > 0) ? item.attributes.statistics.defects.to_investigate.total + ' To investigate ' : '';
+                            break;
+                        case 'no_defect':
+                            message += (item.attributes.statistics.defects.no_defect.total > 0) ? item.attributes.statistics.defects.no_defect.total + ' No defect ' : '';
+                            break;
+                        default:
+                        // code block
+                    }
+                }
+            }
+
             return message;
         },
         getDefectType: function () {
@@ -140,15 +222,26 @@ define(function (require) {
             });
             return def;
         },
-
+        onClickSend: function () {
+            call('POST', talendConfig.slackapi, {"text": this.markdownEditor.getValue()}, null, false).complete(function (response) {
+                if (response.status == 200) {
+                    Util.ajaxSuccessMessenger('talendSendSlackMessage');
+                } else {
+                    Util.ajaxFailMessenger('talendSendSlackMessage');
+                }
+            });
+        },
         setupMarkdownEditor: function () {
-            this.markdownEditor = new MarkdownEditor({
-                value: this.getMessagePreview(this.items),
+            var self = this;
+            self.markdownEditor = new MarkdownEditor({
+                value: self.content,
                 placeholder: Localization.dialog.commentForDefect
             });
-            $('[data-js-issue-comment]', this.$el).html(this.markdownEditor.$el);
+            $('[data-js-issue-comment]', self.$el).html(self.markdownEditor.$el);
+            console.log("getMessagePreview end");
         },
         onShown: function () {
+            console.log("ONSHOWN");
             this.markdownEditor.update();
             this.listenTo(this.markdownEditor, 'change', this.disableHideBackdrop);
             this.initState = {

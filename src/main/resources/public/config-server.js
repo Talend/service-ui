@@ -10,6 +10,7 @@ if(proxyConfig.path == '') {
 }
 
 module.exports = {
+
     devServer: {
         contentBase: publicPath,
         https: false,

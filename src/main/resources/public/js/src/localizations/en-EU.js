@@ -2165,6 +2165,8 @@ define(['util'], function () {
             addFilter: 'Add filter',
             moveLaunch: 'Are you sure you want to move %%% to %%%?',
 
+            talendSendSlack: 'Send to Slack',
+
             filterOptions: 'Filter options',
 
             analyseLaunchesLabel: 'Choose the base on which the Auto Analysis will be performed:',

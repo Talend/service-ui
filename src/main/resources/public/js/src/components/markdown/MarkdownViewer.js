@@ -25,7 +25,6 @@ define(function (require) {
     var Epoxy = require('backbone-epoxy');
     var SingletonMarkdownObject = require('components/markdown/SingletonMarkdownObject');
 
-
     var MainBreadcrumbsComponent = Epoxy.View.extend({
         className: 'markdown-viewer',
         events: {
@@ -40,11 +39,20 @@ define(function (require) {
             var doc = document.createElement('div');
             var self = this;
             var newText;
+            var re = /<(.*?)\|(.*?)>/g;
+            var subst = '<a href="$1" target="_blank">$2</a>';
+
             if (text) {
-                newText = text.escapeHtml().indentSpases();
+
+                text = text.replace(re, subst);
+
+                newText = text.indentSpases();
                 console.log(newText);
+
                 newText = newText.replace(/:heavy_check_mark:/g, '<img src="../../../../img/icons/heavy_check_mark.png" style="width:16px;height=16px;" />');
                 newText = newText.replace(/:heavy_exclamation_mark:/g, '<img src="../../../../img/icons/heavy_exclamation_mark.png" style="width:16px;height=16px;" />');
+
+
                 html = this.simpleMDE.markdown(newText);
                 doc.innerHTML = html;
                 $('img', doc).each(function () {
