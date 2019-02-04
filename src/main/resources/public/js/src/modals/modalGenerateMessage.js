@@ -133,7 +133,7 @@ define(function (require) {
             var async = $.Deferred();
             var self = this;
 
-            if (launch.attributes.statistics.executions.skipped > 0) {
+            if (launch.attributes.statistics.executions.failed > 0) {
                 coreService.getTestItemsByLaunch(launch.id)
                     .done(function (response) {
                         var nbFeaturesKO = 0;
