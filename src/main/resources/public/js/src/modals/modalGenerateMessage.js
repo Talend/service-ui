@@ -139,7 +139,7 @@ define(function (require) {
                         var nbFeaturesKO = 0;
                         var jira = [];
                         _.each(response.content, function (test) {
-                            if (test.description != undefined && test.description.startsWith("Feature") && test.statistics.executions.failed>0) {
+                            if (test.description != undefined && test.description.startsWith("Feature") && test.statistics.executions.failed > 0) {
                                 nbFeaturesKO++;
                             }
                             if (test.issue!=undefined && test.issue.externalSystemIssues != undefined && test.issue.externalSystemIssues.length > 0) {
