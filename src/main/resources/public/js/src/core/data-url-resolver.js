@@ -217,7 +217,7 @@ define(['app'], function (App) {
         return getProjectBase() + '/item/items?ids=' + keys.join(',');
     };
     var itemsByLaunch = function(id) {
-        return getProjectBase() + '/item?filter.eq.launch=' + id;
+        return getProjectBase() + '/item?filter.eq.launch=' + id + '&page.size=500';
     };
     var loadHistory = function (id) {
         return getProjectBase() + '/item/history/?ids=' + id + '&history_depth=10';
