@@ -149,7 +149,8 @@ define(function (require) {
                             }
                             //
                         });
-                        self.content += '<' + self.urlName(launch) + '|' + launch.attributes.name + '>' + ': :heavy_exclamation_mark: `'+ nbFeaturesKO+' features KO`';
+                        var featuresKOString = nbFeaturesKO > 0 ? '`'+ nbFeaturesKO+' features KO`' : '';
+                        self.content += '<' + self.urlName(launch) + '|' + launch.attributes.name + '>' + ': :heavy_exclamation_mark: '+featuresKOString;
                         if(jira.length>0){
                             self.content += _.uniq(jira).join(",");
                         }
