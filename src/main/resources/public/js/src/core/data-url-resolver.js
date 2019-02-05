@@ -216,6 +216,9 @@ define(['app'], function (App) {
     var itemsByKeys = function (keys) {
         return getProjectBase() + '/item/items?ids=' + keys.join(',');
     };
+    var itemsByLaunch = function(id) {
+        return getProjectBase() + '/item?filter.eq.launch=' + id + '&page.size=500';
+    };
     var loadHistory = function (id) {
         return getProjectBase() + '/item/history/?ids=' + id + '&history_depth=10';
     };
@@ -546,6 +549,7 @@ define(['app'], function (App) {
         widgetNames: widgetNames,
         itemByKey: itemByKey,
         itemsByKeys: itemsByKeys,
+        itemsByLaunch: itemsByLaunch,
         loadHistory: loadHistory,
         loadActivityItems: loadActivityItems,
         dashboard: dashboard,

@@ -820,6 +820,7 @@ define(['util'], function () {
             summarizeIssue: 'Summarize issue title:',
             shiftToLaunches: 'Move to all launches',
             shiftToDebug: 'Move to debug',
+            generateSlackMessage: 'Generate Slack Message',
             owner: 'Owner',
             addToDashboard: 'Add to dashboard',
             postIssue: 'Post issue',
@@ -2079,6 +2080,7 @@ define(['util'], function () {
         },
 
         dialogHeader: {
+            talendPreviewMessage: 'Preview message',
             deleteFilter: 'DELETE FILTER',
             deleteProject: 'DELETE PROJECT',
             deleteEmailRule: 'DELETE RULE',
@@ -2095,6 +2097,7 @@ define(['util'], function () {
             titleDeleteDefectType: 'Delete defect type',
             forceFinish: 'Force finish',
             moveToDebug: 'Move to debug',
+            generateSlackMessage: 'Generate Slack Message',
             moveToAllLaunches: 'Move to all launches',
             editLaunch: 'Edit launch',
             editDashboard: 'Edit dashboard',
@@ -2161,6 +2164,8 @@ define(['util'], function () {
             editFilter: 'Edit filter',
             addFilter: 'Add filter',
             moveLaunch: 'Are you sure you want to move %%% to %%%?',
+
+            talendSendSlack: 'Send to Slack',
 
             filterOptions: 'Filter options',
 

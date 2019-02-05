@@ -1,0 +1,18 @@
+<%= data.includeTemplate('_tpl-modal-header', {headerText: data.text.dialogHeader.talendPreviewMessage}) %>
+<div class="modal-body">
+    <div class="inline-editor pr-defect-editor">
+        <div class="text-editor" data-js-issue-comment></div>
+        <div class="rp-defect-editor-bottom">
+            <div class="hot-keys-wrapper">
+                <span class="hot-keys"><%= data.text.ui.escToCancel %></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="footer-buttons">
+        <button class="rp-btn rp-btn-submit" type="button" data-js-send><%= data.text.dialog.talendSendSlack %></button>
+        <button class="rp-btn rp-btn-cancel" type="button" data-js-cancel><%- data.text.ui.close %></button>
+    </div>
+    <%= data.includeTemplate('tpl-modal-footer-warning') %>
+</div>

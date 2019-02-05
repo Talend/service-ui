@@ -139,6 +139,9 @@ define(function (require) {
             case 'changemode':
                 config.trackingDispatcher.trackEventNumber(64);
                 break;
+            case 'generateMessage':
+                config.trackingDispatcher.trackEventNumber(64);
+                break;
             case 'forcefinish':
                 config.trackingDispatcher.trackEventNumber(65);
                 break;

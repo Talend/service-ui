@@ -348,6 +348,10 @@ define([
         return call('GET', urls.itemsByKeys(ids));
     };
 
+    var getTestItemsByLaunch = function (id) {
+        return call('GET', urls.itemsByLaunch(id));
+    };
+
     var getLaunchItem = function (type, id) {
         return call('GET', urls.getLaunchItemUrl(type, id));
     };
@@ -444,6 +448,7 @@ define([
         loadWidget: loadWidget,
         getTestItemInfo: getTestItemInfo,
         getTestItemsInfo: getTestItemsInfo,
+        getTestItemsByLaunch: getTestItemsByLaunch,
         getLaunchItem: getLaunchItem,
         loadDashboardWidget: loadDashboardWidget,
 
