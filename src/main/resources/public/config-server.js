@@ -16,6 +16,10 @@ module.exports = {
         https: false,
         host: '0.0.0.0',
         port: '8282',
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*',
+        },
         proxy: [
             {
                 path: /^\/(composite|api|uat|ui).*/,

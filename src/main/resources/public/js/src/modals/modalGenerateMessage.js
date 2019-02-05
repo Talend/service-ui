@@ -117,7 +117,7 @@ define(function (require) {
             _.each(items, function (i) {
                 promises.push(it.launchDetails(i).promise());
             });
-            Promise.all(promises).then(function(values) {
+            Promise.all(promises).then(function (values) {
                 console.log(values);
                 async.resolve();
             });
@@ -142,16 +142,16 @@ define(function (require) {
                             if (test.description != undefined && test.description.startsWith("Feature") && test.statistics.executions.failed > 0) {
                                 nbFeaturesKO++;
                             }
-                            if (test.issue!=undefined && test.issue.externalSystemIssues != undefined && test.issue.externalSystemIssues.length > 0) {
-                                _.each(test.issue.externalSystemIssues,function(issue){
+                            if (test.issue != undefined && test.issue.externalSystemIssues != undefined && test.issue.externalSystemIssues.length > 0) {
+                                _.each(test.issue.externalSystemIssues, function (issue) {
                                     jira.push(issue.ticketId);
                                 });
                             }
                             //
                         });
-                        var featuresKOString = nbFeaturesKO > 0 ? '`'+ nbFeaturesKO+' features KO`' : '';
-                        self.content += '<' + self.urlName(launch) + '|' + launch.attributes.name + '>' + ': :heavy_exclamation_mark: '+featuresKOString;
-                        if(jira.length>0){
+                        var featuresKOString = nbFeaturesKO > 0 ? '`' + nbFeaturesKO + ' features KO`' : '';
+                        self.content += '<' + self.urlName(launch) + '|' + launch.attributes.name + '>' + ': :heavy_exclamation_mark: ' + featuresKOString;
+                        if (jira.length > 0) {
                             self.content += _.uniq(jira).join(",");
                         }
                         self.content += self.testDetails(launch);
@@ -185,7 +185,7 @@ define(function (require) {
                             message += (item.attributes.statistics.defects.automation_bug.total > 0) ? item.attributes.statistics.defects.automation_bug.total + ' Automation bug ' : '';
                             break;
                         case 'system_issue':
-                            message += (item.attributes.statistics.defects.automation_bug.total > 0) ? item.attributes.statistics.defects.automation_bug.total + ' System issue ' : '';
+                            message += (item.attributes.statistics.defects.system_issue.total > 0) ? item.attributes.statistics.defects.system_issue.total + ' System issue ' : '';
                             break;
                         case 'to_investigate':
                             message += (item.attributes.statistics.defects.to_investigate.total > 0) ? item.attributes.statistics.defects.to_investigate.total + ' To investigate ' : '';
@@ -224,11 +224,22 @@ define(function (require) {
             return def;
         },
         onClickSend: function () {
-            call('POST', talendConfig.slackapi, {"text": this.markdownEditor.getValue()}, null, false).complete(function (response) {
-                if (response.status == 200) {
-                    Util.ajaxSuccessMessenger('talendSendSlackMessage');
-                } else {
-                    Util.ajaxFailMessenger('talendSendSlackMessage');
+            $.ajax({
+                type: 'POST',
+                url: talendConfig.slackapi,
+                contentType: "application/json",
+                data: JSON.stringify({"text": this.markdownEditor.getValue()}),
+                crossDomain: true,
+                async: true,
+                beforeSend: function (jqXHR, settings) {
+                    jqXHR.setRequestHeader( 'Access-Control-Allow-Origin', '*');
+                },
+                success: function (response) {
+                    if (response.status == 200) {
+                        Util.ajaxSuccessMessenger('talendSendSlackMessage');
+                    } else {
+                        Util.ajaxFailMessenger('talendSendSlackMessage');
+                    }
                 }
             });
         },
