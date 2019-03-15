@@ -648,13 +648,13 @@ define(['util'], function () {
             regenerateBtn: 'Regenerate',
             projectRole: 'Project role',
             oldClientComment: '<div class="comment"><p>Client versions before 2.2.3 support <b>com.epam.ta.reportportal.ws.*</b> parameters name format.</p>' +
-            '<p>Client versions from 2.2.3 support <b>rp.*</b> and <b>com.epam.ta.reportportal.ws.*</b> parameters name formats.</p>' +
-            '<p>Please use new names format, because old ones will be deprecated.</p></div>',
+                '<p>Client versions from 2.2.3 support <b>rp.*</b> and <b>com.epam.ta.reportportal.ws.*</b> parameters name formats.</p>' +
+                '<p>Please use new names format, because old ones will be deprecated.</p></div>',
             language: 'Language',
             english: 'English (United States)',
             russian: 'Russian',
             reloadPage: 'You have to <a href="">Reload</a> the page to implement language change.<br>' +
-            ' Ru lang in beta. Please help us to translate it, send your PR to this <a href ="https://github.com/reportportal/service-ui/blob/develop/src/main/resources/public/js/src/localizations/ru-RU.js">file</a>.'
+                ' Ru lang in beta. Please help us to translate it, send your PR to this <a href ="https://github.com/reportportal/service-ui/blob/develop/src/main/resources/public/js/src/localizations/ru-RU.js">file</a>.'
         },
 
         dashboard: {
@@ -1618,8 +1618,8 @@ define(['util'], function () {
             sendStatisticsSwitcher: 'Help make Report Portal better by automatically sending statistics to us',
             statisticsListToogler: 'List of sent statistics',
             statisticsMessage: 'You can help us improve ReportPortal by opting to send usage statistics. While' +
-            ' you\'re using the app, we\'ll gather data that might help us improve Report Portal performance and' +
-            ' usability by tracking usage frequency of particular features. See below for details about what information is sent.',
+                ' you\'re using the app, we\'ll gather data that might help us improve Report Portal performance and' +
+                ' usability by tracking usage frequency of particular features. See below for details about what information is sent.',
             statisticsListMessage: 'Usage statistics reports usually won\'t include any personal information, but they might include:',
             statisticsPoint1: 'Device information - such as your hardware model, operating system version, screen resolution, browser version;',
             statisticsPoint2: 'Log information - such as details of how you use ReportPortal, where you click and what actions you do, how long you leave app open.',
@@ -1780,7 +1780,8 @@ define(['util'], function () {
             updateServerSettings: 'Server settings were successfully updated',
             addUserWithoutEmail: 'User has been created, but impossible to send message due to email server configuration is broken or switched-off',
             removeIndex: 'Index was removed successfully',
-            generateIndex: 'Index generation is in progress'
+            generateIndex: 'Index generation is in progress',
+            talendSendSlackMessage: 'Slack report sent successfully'
         },
 
         failMessages: {
@@ -1868,7 +1869,9 @@ define(['util'], function () {
             dublPostFix: 'Postfix already used or not align with already existing data. Please use another one',
             serverNotConfigured: 'Email server is not configured',
             impossibleInvite: 'Impossible to invite user due to email server configuration is broken or switched-off configuration is broken or switched-off',
-            restorationExpired: 'The link to restore password has been expired or already used'
+            restorationExpired: 'The link to restore password has been expired or already used',
+            talendSendSlackMessage: 'Something failed with the sending of the slack report'
+
         },
 
         infoMessages: {
