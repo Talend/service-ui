@@ -35,7 +35,6 @@ define(function (require) {
     var call = CallService.call;
     var coreService = require('coreService');
 
-
     var config = App.getInstance();
 
     var ModalGenerateMessage = ModalView.extend({
@@ -112,7 +111,7 @@ define(function (require) {
             console.log(talendConfig);
             this.content = '';
             var it = this;
-            this.content += 'Daily report of ' + Moment().format('LL') + '\n';
+            this.content += '*Daily report of ' + Moment().format('LL') + ', by '+userModel.attributes.fullName+'*\n';
             var promises = [];
             _.each(items, function (i) {
                 promises.push(it.launchDetails(i).promise());
@@ -224,24 +223,19 @@ define(function (require) {
             return def;
         },
         onClickSend: function () {
-            $.ajax({
-                type: 'POST',
-                url: talendConfig.slackapi,
-                contentType: "application/json",
-                data: JSON.stringify({"text": this.markdownEditor.getValue()}),
-                crossDomain: true,
-                async: true,
-                beforeSend: function (jqXHR, settings) {
-                    jqXHR.setRequestHeader( 'Access-Control-Allow-Origin', '*');
-                },
-                success: function (response) {
-                    if (response.status == 200) {
-                        Util.ajaxSuccessMessenger('talendSendSlackMessage');
-                    } else {
-                        Util.ajaxFailMessenger('talendSendSlackMessage');
-                    }
+            var self = this;
+            fetch(talendConfig.slackapi, {
+                method: 'POST',
+                body: JSON.stringify({"text": this.markdownEditor.getValue()}),
+            }).then(function(response) {
+                console.log(response);
+                if(response.status=='200' && response.ok == true){
+                    Util.ajaxSuccessMessenger('talendSendSlackMessage');
+                } else {
+                    Util.ajaxFailMessenger('talendSendSlackMessage');
                 }
             });
+            this.$modalWrapper && this.$modalWrapper.modal('hide');
         },
         setupMarkdownEditor: function () {
             var self = this;
@@ -253,8 +247,6 @@ define(function (require) {
             console.log("getMessagePreview end");
         },
         onShown: function () {
-            console.log("ONSHOWN");
-            this.markdownEditor.update();
             this.listenTo(this.markdownEditor, 'change', this.disableHideBackdrop);
             this.initState = {
                 comment: this.markdownEditor.getValue(),
